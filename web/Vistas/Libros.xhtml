@@ -1,0 +1,240 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../WEB-INF/templates/Principal.xhtml">
+
+            <ui:define name="content">
+                <h:form id="frmListaLibros">
+                    <p:growl id="mensajes" showDetail="true"/>
+
+                    <p:dataTable id="tblLibros" editable="true"
+                                 var="lib" value="#{aBMLibrosFormsBeans.libros}"
+                                 paginator="true" paginatorPosition="top" rows="10"
+
+                                 paginatorTemplate=" {PageLinks}  {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10"
+                                 emptyMessage="No hay registros de Libros">
+                        <f:facet name="header">
+                            LISTA DE LIBROS                            
+                        </f:facet>
+                        <p:ajax event="rowEdit" listener="#{aBMLibrosFormsBeans.onRowEdit}"
+                                update="frmListaLibros:mensajes"/>
+                        <p:ajax event="rowEditCancel" listener="#{aBMLibrosFormsBeans.onRowEditCancel(event)}"
+                                update="frmListaLibros:mensajes"/>
+
+
+
+                        <p:column headerText="Código" >
+                            <p:outputLabel value="#{lib.codigo}">
+                            </p:outputLabel>
+                        </p:column>   
+
+                        <p:column headerText="ISBN">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <p:outputLabel value="#{lib.isbn}" > </p:outputLabel>
+                                </f:facet>
+                                <f:facet name="input">
+                                    
+                                    <p:inputNumber id="txtNuevoIsbnTbl" required="true" 
+                                                   requiredMessage="Se requiere ingresar un nro. de ISBN"
+                                                   value="#{lib.isbn}"
+                                                   decimalPlaces="0" maxlength="13" />
+                                    
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>   
+
+                        <p:column headerText="Título" sortBy="#{lib.titulo}" 
+                                  filterBy="#{lib.titulo}" filterMatchMode="startsWith">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <p:outputLabel value="#{lib.titulo}"></p:outputLabel>
+                                    
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputText id="txtNuevoTituloTbl" required="true"
+                                                 requiredMessage="Se requiere ingresar un Título de Libro"
+                                                 value="#{lib.titulo}"/>
+                                    
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>   
+
+
+                        <p:column headerText="Autor/es">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <p:outputLabel value="#{lib.autores}"></p:outputLabel>
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputText id="txtNuevoAutorTbl" required="true"
+                                                 value="#{lib.autores}"
+                                                 requiredMessage="Se requiere ingresar los Autores del Libro"/>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>   
+
+                        <p:column headerText="Temática">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <p:outputLabel value="#{lib.tematica}"></p:outputLabel>
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputText id="txtNuevoTematicaTbl" required="true"
+                                                 value="#{lib.tematica}"
+                                                 requiredMessage="Se requiere ingresar la Tematica del Libro"/>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>   
+
+                        <p:column headerText="Fecha de Edición">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <p:outputLabel value="#{lib.fechaEdicion}">
+                                                   <f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+                                                  
+                                    </p:outputLabel>
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:calendar
+                                        id="txtFechaEdicionTbl" required="true"
+                                        value="#{lib.fechaEdicion}"
+                                        pattern="dd-MM-yyyy" mask="true"
+                                        size="10" maxlength="10" locale="es"
+                                        requiredMessage="Se requiere ingresar la Fecha de Edición">
+                                    </p:calendar>                           
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>               
+
+                        <p:column headerText="Cant. de Hojas">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <p:outputLabel value="#{lib.cantPaginas}"></p:outputLabel>
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputNumber id="txtNuevoCantPaginaTbl" required="true"
+                                                   value="#{lib.cantPaginas}" decimalPlaces="0" maxlength="4"
+                                                   requiredMessage="Se requiere ingresar la cantidad de páginas del Libro"/>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>   
+
+                        <p:column headerText="Editorial">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <p:outputLabel value="#{lib.editorial}"></p:outputLabel>
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputText id="txtNuevoEditorialTbl" required="true"
+                                                 value="#{lib.editorial}"
+                                                 requiredMessage="Se requiere ingresar la Editorial del Libro"/>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>  
+
+                        <p:column headerText="Opciones">
+                            <p:commandButton id="btnEliminar"  icon="ui-icon-trash"
+                                             actionListener="#{aBMLibrosFormsBeans.eliminarLibroSeleccionado(lib)}"
+                                             update="frmListaLibros">
+                                <p:rowEditor/>
+
+                            </p:commandButton>
+
+                        </p:column>   
+
+                    </p:dataTable>
+                    <p/>
+
+
+                    <p/>
+                    <p:commandButton id="bntAgregarNuevoLibro"
+                                     value="Agregar Nuevo Libro"
+                                     oncomplete="PF('nuevoLibro').show()"
+                                     update="dlgAddNuevoLibro"
+                                     resetValues="true" >
+
+
+                    </p:commandButton>
+
+
+
+
+
+                </h:form>
+                <p:dialog id="dlgAddNuevoLibro" widgetVar="nuevoLibro"
+                          modal="true" header="Alta de Libros" resizable="false" 
+                          style="animation: alternate"  >
+                    <h:form id="frmNuevoLibro">
+                        <p:panelGrid id="tblNuevoLibro" columns="2">
+                            <p:outputLabel id="lblNuevoCodigo" value="Código:" for="txtNuevoCodigo" style="color: azure" />
+                            <p:inputText id="txtNuevoCodigo" required="true"
+                                         value="#{aBMLibrosFormsBeans.nuevoLibro.codigo}"/>
+
+                            <p:outputLabel id="lblNuevoIsbn" value="ISBN:" for="txtNuevoIsbn" style="color: azure"/>
+                            <p:inputNumber id="txtNuevoIsbn" required="true"
+                                           value="#{aBMLibrosFormsBeans.nuevoLibro.isbn}"
+                                           decimalPlaces="0" maxlength="13"/>
+
+                            <p:outputLabel id="lblNuevoTitulo" value="Título:" for="txtNuevoTitulo" style="color: azure"/>
+                            <p:inputText id="txtNuevoTitulo" required="true"
+                                         value="#{aBMLibrosFormsBeans.nuevoLibro.titulo}"/>
+
+                            <p:outputLabel id="lblNuevoAutor" value="Autor/es:" for="txtNuevoAutor" style="color: azure"/>
+                            <p:inputText id="txtNuevoAutor" required="true"
+                                         value="#{aBMLibrosFormsBeans.nuevoLibro.autores}"/>
+
+                            <p:outputLabel id="lblNuevoTematica" value="Temática:" for="txtNuevoTematica" style="color: azure"/>
+                            <p:inputText id="txtNuevoTematica" required="true"
+                                         value="#{aBMLibrosFormsBeans.nuevoLibro.tematica}"/>
+
+                            <p:outputLabel id="lblNuevoFechaEdicion" value="Fecha de Edicion:" for="cldrFechaEdicion" style="color: azure"/>
+                            <p:calendar id="cldrFechaEdicion" required="true"
+                                        value="#{aBMLibrosFormsBeans.nuevoLibro.fechaEdicion}"
+                                        pattern="dd-MM-yyyy" mask="true"
+                                        size="10" maxlength="10" locale="es"></p:calendar>
+                                
+
+
+                            <p:outputLabel id="lblCantPagina" value="Cantidad de Páginas:" for="txtNuevoCantPagina" style="color: azure"/>
+                            <p:inputNumber id="txtNuevoCantPagina" required="true"
+                                           decimalPlaces="0" maxlength="4"
+                                           value="#{aBMLibrosFormsBeans.nuevoLibro.cantPaginas}"/>
+
+                            <p:outputLabel id="lblNuevoEditorial" value="Editorial:" for="txtNuevoEditorial" style="color: azure"/>
+                            <p:inputText id="txtNuevoEditorial" required="true"
+                                         value="#{aBMLibrosFormsBeans.nuevoLibro.editorial}"/>
+
+                            <p:commandButton id="btnRegistrarNuevoLibro" 
+                                             value="Guardar Nuevo Libro" icon="ui-icon-disk" style="color: aqua"
+                                             actionListener="#{aBMLibrosFormsBeans.guardarNuevoLibro()}"
+                                             update=":frmListaLibros"
+                                             oncomplete="PF('nuevoLibro').hide()"> 
+
+                            </p:commandButton>
+                            <p:commandButton id="btnCancelar" value="Cancelar" icon="ui-icon-cancel" style="color: aqua"
+                                             update="dlgAddNuevoLibro"
+                                             oncomplete="PF('nuevoLibro').hide()">
+
+                            </p:commandButton>
+                        </p:panelGrid>
+
+                    </h:form>
+
+                </p:dialog>
+
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
